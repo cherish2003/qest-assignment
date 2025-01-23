@@ -2,12 +2,23 @@
 
 @theme {
   --color-customgrey: #f5f6f7;
-
   --color-customblack: #323130;
   --color-customwhite: #fdfdfd;
+
+  /* card colors */
   --color-card1: #dff4ce;
   --color-card2: #fff1d8;
-  --color-card3: #fff1d8;
-  --color-card4: #fff1d8;
-  --color-card5: #fff1d8;
+  --color-card3: #f3bbb7;
+  --color-card4: #b6e6f6;
+  --color-card5: #f1f2ed;
+}
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
