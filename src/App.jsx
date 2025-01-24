@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar";
 import { Routes, Route } from "react-router-dom";
 import BillingPage from "./pages/Billingpage";
 import PaymentFlow from "./components/PaymentFlow";
+import AnalyticsPage from "./pages/AnalyticsPage";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       <Route path="/" element={<Homepage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/bills" element={<BillingPage />} />
-      <Route path="/payment" element={<PaymentFlow />} />
+      <Route path="/analytics" element={<AnalyticsPage />} />
     </Routes>
   );
 }

@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../hooks/useCart";
 import { useCustomer } from "../hooks/useCustomer";
 import Sidebar from "../components/Sidebar";
-import CartCard from "../components/CartCard";
 import Customerdetails from "../components/Customerdetails";
 import PaymentFlow from "../components/PaymentFlow";
 
 const CartPage = () => {
-  // const navigate = useNavigate();
-  const [cart, addToCart, removeFromCart] = useCart();
+  const [cart, addToCart, updateQuantity, removeFromCart] = useCart();
+  useEffect(() => {
+    console.log("cart info", cart);
+  }, [cart]);
+
   const [simulatePayment, setsimulatePayment] = useState(false);
   const [customerdata, saveCustomerDetails, clearCustomerDetails] =
     useCustomer();
@@ -22,10 +24,12 @@ const CartPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [isCartExited, setIsCartExited] = useState(false);
 
-  const totalAmount = cart.reduce(
+  const totalAmount = cart?.reduce(
     (acc, item) => acc + item.pricetag * item.quantity,
     0
   );
+
+  console.log(cart);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -44,10 +48,6 @@ const CartPage = () => {
       return;
     }
 
-    // alert(`order confirmed for ${customerDetails.name}`);
-    console.log("Customer Details:", customerDetails);
-    console.log("Cart Items:", cart);
-
     saveCustomerDetails({
       customerinfo: customerDetails,
       orderinfo: cart,
@@ -61,7 +61,7 @@ const CartPage = () => {
   return (
     <Sidebar>
       {!simulatePayment ? (
-        <div className="container mx-auto p-4 ">
+        <div className="container mx-auto p-4">
           <h1 className="text-3xl font-bold text-center mb-6">Your Cart 🛒</h1>
 
           <div className="relative no-scrollbar">
@@ -89,8 +89,52 @@ const CartPage = () => {
                       </h2>
                       <div>
                         <ul className="space-y-4">
-                          {cart.map((item, index) => (
-                            <CartCard item={item} key={index} />
+                          {cart.map((item) => (
+                            <motion.li
+                              key={item.id}
+                              className="flex flex-wrap justify-between items-center p-4 border rounded-lg bg-white shadow-sm"
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -20 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <div>
+                                <span className="text-lg font-semibold">
+                                  {item.name}
+                                </span>
+                                <span className="ml-4 text-sm text-gray-500">
+                                  ${item.price}
+                                </span>
+                              </div>
+                              <div className="flex items-center space-x-2 mt-2 md:mt-0">
+                                <button
+                                  disabled={item.quantity === 1}
+                                  onClick={() =>
+                                    updateQuantity(item.id, item.quantity - 1)
+                                  }
+                                  className="bg-gray-300 text-black px-2 py-1 rounded"
+                                >
+                                  -
+                                </button>
+                                <span>{item.quantity}</span>
+                                <button
+                                  onClick={() =>
+                                    updateQuantity(item.id, item.quantity + 1)
+                                  }
+                                  className="bg-gray-300 text-black px-2 py-1 rounded"
+                                >
+                                  +
+                                </button>
+                                <motion.button
+                                  onClick={() => removeFromCart(item.id)}
+                                  className="bg-red-500 text-white px-4 py-2 rounded"
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                >
+                                  Remove
+                                </motion.button>
+                              </div>
+                            </motion.li>
                           ))}
                         </ul>
 

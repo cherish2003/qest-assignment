@@ -53,50 +53,58 @@ const BillingPage = () => {
           </p>
         ) : (
           <div className="space-y-6">
-            {customerDetails?.map((customer, index) => (
-              <motion.div
-                key={index}
-                className="p-4 border rounded-lg shadow-sm bg-white"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <h2 className="text-xl font-semibold">
-                  Customer: {customer.customerinfo.name}
-                </h2>
-                <p>Email: {customer.customerinfo.email}</p>
-                <p>Phone: {customer.customerinfo.phone}</p>
-                <p>Address: {customer.customerinfo.address}</p>
-                <p className="mt-2 font-semibold">Order Details:</p>
-                <ul className="space-y-2 mt-2">
-                  {customer.orderinfo.map((item, itemIndex) => (
-                    <li
-                      key={itemIndex}
-                      className="flex justify-between items-center p-2 border rounded bg-gray-100"
+            {customerDetails
+              ?.slice() // Create a shallow copy to avoid mutating the original array
+              .sort(
+                (a, b) =>
+                  new Date(b.TimeandDate).getTime() -
+                  new Date(a.TimeandDate).getTime()
+              ) // Sort in descending order of TimeandDate
+              .map((customer, index) => (
+                <motion.div
+                  key={index}
+                  className="p-4 border rounded-lg shadow-sm bg-white"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <h2 className="text-xl font-semibold">
+                    Customer: {customer.customerinfo.name}
+                  </h2>
+                  <p>Email: {customer.customerinfo.email}</p>
+                  <p>Phone: {customer.customerinfo.phone}</p>
+                  <p>Address: {customer.customerinfo.address}</p>
+                  <p className="mt-2 font-semibold">Order Details:</p>
+                  <ul className="space-y-2 mt-2">
+                    {customer.orderinfo.map((item, itemIndex) => (
+                      <li
+                        key={itemIndex}
+                        className="flex justify-between items-center p-2 border rounded bg-gray-100"
+                      >
+                        <span>{item.name}</span>
+                        <span>
+                          Quantity: {item.quantity || 1}, Price: $
+                          {item.pricetag}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-4 flex justify-between items-center">
+                    <span className="text-lg font-semibold">
+                      Total Bill: ${customer.bill || "0"}
+                    </span>
+                    <motion.button
+                      onClick={() => downloadPDFReceipt(customer)}
+                      className="bg-customblack text-white px-4 py-2 rounded hover:cursor-pointer"
+                      whileHover={{ scale: 1.0 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <span>{item.name}</span>
-                      <span>
-                        Quantity: {item.quantity}, Price: ${item.pricetag}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-4 flex justify-between items-center">
-                  <span className="text-lg font-semibold">
-                    Total Bill: ${customer.bill}
-                  </span>
-                  <motion.button
-                    onClick={() => downloadPDFReceipt(customer)}
-                    className="bg-customblack text-white px-4 py-2 rounded hover:cursor-pointer"
-                    whileHover={{ scale: 1.0 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Download PDF Receipt
-                  </motion.button>
-                </div>
-              </motion.div>
-            ))}
+                      Download PDF Receipt
+                    </motion.button>
+                  </div>
+                </motion.div>
+              ))}
           </div>
         )}
       </div>

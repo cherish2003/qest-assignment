@@ -49,7 +49,7 @@ const Sidebar = ({ children }) => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-gray-100 ">
+    <div className="flex min-h-screen sm:h-screen bg-gray-100 ">
       <div
         className={`fixed top-0 left-0 z-20 h-full bg-white shadow-lg transition-all duration-300 ${
           isOpen ? "w-64" : "w-16"
