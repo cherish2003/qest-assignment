@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-const useCart = () => {
+export const useCart = () => {
   const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem("cart");
     return savedCart ? JSON.parse(savedCart) : [];
@@ -10,35 +10,34 @@ const useCart = () => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (cartitem) => {
+  const addToCart = useCallback((cartItem) => {
     setCart((prev) => {
-      const existingItem = prev.find((item) => item.id === cartitem.id);
+      const existingItem = prev.find((item) => item.id === cartItem.id);
       if (existingItem) {
         return prev.map((item) =>
-          item.id === cartitem.id
+          item.id === cartItem.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prev, { ...cartitem, quantity: 1 }];
+      return [...prev, { ...cartItem, quantity: 1 }];
     });
-  };
+  }, []);
 
-  const removeFromCart = (id) => {
+  const removeFromCart = useCallback((id) => {
     setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  }, []);
 
-  const updateQuantity = (id, quantity) => {
+  const updateQuantity = useCallback((id, quantity) => {
     setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
-  };
+  }, []);
 
-  const clearCart = () => setCart([]);
+  const isInCart = useCallback(
+    (id) => cart.some((item) => item.id === id),
+    [cart]
+  );
 
-  return { cart, addToCart, removeFromCart, updateQuantity, clearCart };
+  return [cart, addToCart, removeFromCart, updateQuantity, isInCart];
 };
-
-export default useCart;

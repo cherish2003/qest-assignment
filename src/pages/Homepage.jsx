@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FilterBar from "../services/FilterBar";
 import ServiceList from "../components/ServiceList";
 import Sidebar from "../components/Sidebar";
 import { services } from "../data/services";
-
+import { useCart } from "../hooks/useCart";
+import { useNavigate } from "react-router-dom";
 const Homepage = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedServices, setSelectedServices] = useState([]);
+  const [movedToCart, setMovedToCart] = useState([]);
+  const [cart, addToCart, isInCart] = useCart();
 
   const toggleSelect = (service) => {
     if (selectedServices.some((s) => s.id === service.id)) {
@@ -14,6 +17,17 @@ const Homepage = () => {
     } else {
       setSelectedServices([...selectedServices, service]);
     }
+  };
+
+  const handleMoveToCart = (service) => {
+    console.log(service);
+    if (!isInCart(service.name)) {
+      addToCart(service);
+    }
+
+    setTimeout(() => {
+      setSelectedServices([]);
+    }, 800);
   };
 
   const filteredTypes =
@@ -49,7 +63,10 @@ const Homepage = () => {
             color={type.color}
             services={type.services}
             selectedServices={selectedServices}
+            movedToCart={movedToCart}
             toggleSelect={toggleSelect}
+            onMoveToCart={handleMoveToCart}
+            isSelectedFilter={activeFilter === "Selected"}
           />
         ))}
       </div>
