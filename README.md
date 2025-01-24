@@ -50,13 +50,17 @@ The build will be generated in the `build` directory.
 3. **Core Functionalities**:
    - **Service Selection**: Users can browse and select available services.
    - **Cart Management**: Add, update, or remove services from the cart.
+   - **Bill Management**: View and download receipt of the bills of different customers.
    - **Checkout Process**: Capture user details and simulate payments.
 
 ###  Enhancements :
 1. **Filtering**:
    - Enable users to filter services by category.
 
-2. **Analytics and Insights**:
+2. **Billing info**:
+   - Enables to see various bills of users along with receipt download.
+
+3. **Analytics and Insights**:
    - Display metrics such as total revenue, services sold, and Most Popular Services.
 
 
