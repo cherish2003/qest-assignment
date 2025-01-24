@@ -34,7 +34,6 @@ const menuItems = [
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const location = useLocation(); // Hook to get the current route
 
   useEffect(() => {
     const handleResize = () => {

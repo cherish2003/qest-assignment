@@ -54,12 +54,12 @@ const BillingPage = () => {
         ) : (
           <div className="space-y-6">
             {customerDetails
-              ?.slice() // Create a shallow copy to avoid mutating the original array
+              ?.slice() 
               .sort(
                 (a, b) =>
                   new Date(b.TimeandDate).getTime() -
                   new Date(a.TimeandDate).getTime()
-              ) // Sort in descending order of TimeandDate
+              ) 
               .map((customer, index) => (
                 <motion.div
                   key={index}
